@@ -3,6 +3,7 @@ name = "satellite_imagery_downloader"
 description = "A library/utility to download satellite imagery from the Sentinel Hub API"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 [lib]
 name = "satellite_imagery_downloader"
