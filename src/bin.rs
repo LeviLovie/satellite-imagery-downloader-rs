@@ -71,15 +71,21 @@ fn run() {
         fs::create_dir(image_dir).unwrap();
     }
 
-    if prefs["tl"].as_str().unwrap().is_empty()
-        || prefs["br"].as_str().unwrap().is_empty()
-        || prefs["zoom"].as_str().unwrap().is_empty()
-    {
+    if prefs["tl"].as_str().unwrap().is_empty() || prefs["br"].as_str().unwrap().is_empty() {
         let messages = ["Top-left corner: ", "Bottom-right corner: ", "Zoom level: "];
         if let Some(inputs) = take_input(&messages) {
             prefs["tl"] = json!(inputs[0]);
             prefs["br"] = json!(inputs[1]);
             prefs["zoom"] = json!(inputs[2]);
+        } else {
+            return;
+        }
+    }
+
+    if prefs["zoom"].as_str().unwrap().is_empty() {
+        let messages = ["Zoom level: "];
+        if let Some(inputs) = take_input(&messages) {
+            prefs["zoom"] = json!(inputs[0]);
         } else {
             return;
         }

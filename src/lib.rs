@@ -60,6 +60,9 @@ pub fn download_image(
 
     let img = RgbaImage::new(img_w, img_h);
     let img = Mutex::new(img);
+    let bar = Mutex::new(indicatif::ProgressBar::new(
+        ((br_tile_x - tl_tile_x + 1) * (br_tile_y - tl_tile_y + 1)) as u64,
+    ));
 
     (tl_tile_y..=br_tile_y).into_par_iter().for_each(|tile_y| {
         for tile_x in tl_tile_x..=br_tile_x {
@@ -85,12 +88,15 @@ pub fn download_image(
                     }
                 }
             }
+            bar.lock().unwrap().inc(1);
         }
     });
+    bar.lock().unwrap().finish();
 
     DynamicImage::ImageRgba8(img.into_inner().unwrap())
 }
 
+#[allow(dead_code)]
 fn image_size(lat1: f64, lon1: f64, lat2: f64, lon2: f64, zoom: u8, tile_size: u32) -> (u32, u32) {
     let scale = 1 << zoom;
     let (tl_proj_x, tl_proj_y) = project_with_scale(lat1, lon1, scale as f64);

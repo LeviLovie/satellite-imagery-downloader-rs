@@ -1,9 +1,9 @@
 [package]
 name = "satellite_imagery_downloader"
 description = "A library/utility to download satellite imagery from the Sentinel Hub API"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-license = "MIT"
+license-file = "LICENSE"
 
 [lib]
 name = "satellite_imagery_downloader"
@@ -16,6 +16,7 @@ path = "src/bin.rs"
 [dependencies]
 chrono = "0.4.39"
 image = "0.25.5"
+indicatif = "0.17.11"
 rayon = "1.10.0"
 regex = "1.11.1"
 reqwest = { version = "0.12.12", features = ["blocking"] }
