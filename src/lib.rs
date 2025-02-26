@@ -73,23 +73,20 @@ pub fn download_image(
             if let Some(tile) = download_tile(&url, headers, channels) {
                 let mut img = img.lock().unwrap();
 
-                let mut tl_rel_x = tile_x * tile_size as i32 - tl_pixel_x;
-                let mut tl_rel_y = tile_y * tile_size as i32 - tl_pixel_y;
-                if tl_rel_x < 0 {
-                    tl_rel_x = 0;
-                }
-                if tl_rel_y < 0 {
-                    tl_rel_y = 0;
-                }
-
+                let tl_rel_x = tile_x * tile_size as i32 - tl_pixel_x;
+                let tl_rel_y = tile_y * tile_size as i32 - tl_pixel_y;
                 let width_min = img_w as i32 - tl_rel_x;
                 let height_min = img_h as i32 - tl_rel_y;
-                let tile_w = width_min.min(tile_size as i32).max(0) as u32;
-                let tile_h = height_min.min(tile_size as i32).max(0) as u32;
+                let tile_w = width_min.min(tile_size as i32) as u32;
+                let tile_h = height_min.min(tile_size as i32) as u32;
 
                 for y in 0..tile_h {
                     for x in 0..tile_w {
                         let pixel = tile.get_pixel(x, y);
+                        if tl_rel_x < 0 || tl_rel_y < 0 {
+                            continue;
+                        }
+                        println!("{} {} {} {}", x, y, tl_rel_x, tl_rel_y);
                         img.put_pixel((tl_rel_x as u32) + x, (tl_rel_y as u32) + y, pixel);
                     }
                 }
