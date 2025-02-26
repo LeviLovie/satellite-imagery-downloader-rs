@@ -38,7 +38,6 @@ fn run() {
         let default_prefs = json!({
             "url": "https://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
             "tile_size": 256,
-            "channels": 3,
             "dir": file_dir.join("images").to_str().unwrap().to_string(),
             "headers": {
                 "cache-control": "max-age=0",
