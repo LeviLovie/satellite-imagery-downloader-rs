@@ -35,9 +35,9 @@ Google Maps satellite imagery will be used by default.
 
 ### Preferences file
 
+> `"channels"` is not supported, all images downloaded are RGBA.
 - `"url"` is the URL template that the program will use to download map tiles.
 - `"tile_size"` is the size of a single tile in pixels. The default is 256.
-- `"channels"` determines how tiles will be decoded as well as the number of channels in the final image. The default is `3`. Use `4` for transparent tiles, such as in roads-only layers.
 - `"dir"` is the directory where your images will be saved. If the directory doesn't exist, it will be created automatically.
 - `"headers"` are the headers that the program will use to make HTTP requests.
 
