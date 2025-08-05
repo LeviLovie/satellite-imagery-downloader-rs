@@ -4,6 +4,8 @@ description = "A library/utility to download satellite imagery"
 version = "0.2.3"
 edition = "2021"
 license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/LeviLovie/satellite-imagery-downloader-rs"
 
 [lib]
 name = "satellite_imagery_downloader"
