@@ -30,6 +30,7 @@ fn project_with_scale(lat: f64, lon: f64, scale: f64) -> (f64, f64) {
     (x, y)
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn download_image(
     lat1: f64,
     lon1: f64,
@@ -55,8 +56,8 @@ pub fn download_image(
     let br_tile_x = br_proj_x as i32;
     let br_tile_y = br_proj_y as i32;
 
-    let img_w = (br_pixel_x - tl_pixel_x).abs() as u32;
-    let img_h = (br_pixel_y - tl_pixel_y).abs() as u32;
+    let img_w = (br_pixel_x - tl_pixel_x).unsigned_abs();
+    let img_h = (br_pixel_y - tl_pixel_y).unsigned_abs();
 
     let img = RgbaImage::new(img_w, img_h);
     let img = Mutex::new(img);
@@ -86,7 +87,6 @@ pub fn download_image(
                         if tl_rel_x < 0 || tl_rel_y < 0 {
                             continue;
                         }
-                        println!("{} {} {} {}", x, y, tl_rel_x, tl_rel_y);
                         img.put_pixel((tl_rel_x as u32) + x, (tl_rel_y as u32) + y, pixel);
                     }
                 }
