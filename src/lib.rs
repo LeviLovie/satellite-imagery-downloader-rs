@@ -86,7 +86,6 @@ pub fn download_image(
                         if tl_rel_x < 0 || tl_rel_y < 0 {
                             continue;
                         }
-                        println!("{} {} {} {}", x, y, tl_rel_x, tl_rel_y);
                         img.put_pixel((tl_rel_x as u32) + x, (tl_rel_y as u32) + y, pixel);
                     }
                 }
