@@ -12,7 +12,7 @@ use std::path::{Path, PathBuf};
 
 fn main() {
     if let Err(e) = try_main() {
-        eprintln!("Error: {:?}", e);
+        eprintln!("Error: {e:?}");
         std::process::exit(1);
     }
 }
@@ -105,10 +105,10 @@ fn try_main() -> Result<()> {
     println!("Saving the image...");
     println!("Image size: {}x{}", img.width(), img.height());
     let timestamp = Local::now().format("%Y%m%d%H%M%S").to_string();
-    let name = format!("img_{}.png", timestamp);
+    let name = format!("img_{timestamp}.png");
     let save_path = image_dir.join(&name);
     img.save(&save_path).unwrap();
-    println!("Saved as {:?}", save_path);
+    println!("Saved as {save_path:?}");
 
     if args.open {
         println!("Opening image in default viewer...");
