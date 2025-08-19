@@ -75,11 +75,5 @@ Images in full resolution: https://mega.nz/folder/7sxTwALS#n2bFCYk9JsiU7nbVQH-nt
 ![](img/img_3.png)
 <nobr><sup><sup>© 2022 Google</sup></sup></nobr>
 
-![](img/img_4.png)
-<nobr><sup><sup>© 2022 Google</sup></sup></nobr>
-
-![](img/img_5.png)
-<nobr><sup><sup>© 2023 Google</sup></sup></nobr>
-
 ![](img/img_6.png)
 <nobr><sup><sup>© OpenStreetMap</sup></sup></nobr>
