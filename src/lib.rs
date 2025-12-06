@@ -81,13 +81,18 @@ pub fn download_image(
                 let tile_w = width_min.min(tile_size as i32) as u32;
                 let tile_h = height_min.min(tile_size as i32) as u32;
 
+                let start_x = tl_rel_x.max(0) as u32;
+                let start_y = tl_rel_y.max(0) as u32;
+
+                let src_start_x = (start_x as i32 - tl_rel_x) as u32;
+                let src_start_y = (start_y as i32 - tl_rel_y) as u32;
+                let tile_w = (tile_size - src_start_x).min(img_w - start_x);
+                let tile_h = (tile_size - src_start_y).min(img_h - start_y);
+
                 for y in 0..tile_h {
                     for x in 0..tile_w {
-                        let pixel = tile.get_pixel(x, y);
-                        if tl_rel_x < 0 || tl_rel_y < 0 {
-                            continue;
-                        }
-                        img.put_pixel((tl_rel_x as u32) + x, (tl_rel_y as u32) + y, pixel);
+                        let pixel = tile.get_pixel(src_start_x + x, src_start_y + y);
+                        img.put_pixel(start_x + x, start_y + y, pixel);
                     }
                 }
             }
