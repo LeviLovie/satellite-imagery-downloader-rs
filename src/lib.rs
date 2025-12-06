@@ -1,5 +1,5 @@
 use image::{DynamicImage, GenericImageView, RgbaImage};
-use rayon::prelude::*;
+use rayon::{prelude::*, ThreadPoolBuilder};
 use reqwest::blocking::Client;
 use std::sync::Mutex;
 
@@ -41,6 +41,7 @@ pub fn download_image(
     headers: &reqwest::header::HeaderMap,
     tile_size: u32,
     channels: u8,
+    download_threads: usize,
 ) -> DynamicImage {
     let scale = 1 << zoom;
     let (tl_proj_x, tl_proj_y) = project_with_scale(lat1, lon1, scale as f64);
@@ -65,35 +66,44 @@ pub fn download_image(
         ((br_tile_x - tl_tile_x + 1) * (br_tile_y - tl_tile_y + 1)) as u64,
     ));
 
-    (tl_tile_y..=br_tile_y).into_par_iter().for_each(|tile_y| {
-        for tile_x in tl_tile_x..=br_tile_x {
-            let url = url_template
-                .replace("{x}", &tile_x.to_string())
-                .replace("{y}", &tile_y.to_string())
-                .replace("{z}", &zoom.to_string());
-            if let Some(tile) = download_tile(&url, headers, channels) {
-                let mut img = img.lock().unwrap();
+    let pool = ThreadPoolBuilder::new()
+        .num_threads(download_threads)
+        .build()
+        .unwrap();
 
-                let tl_rel_x = tile_x * tile_size as i32 - tl_pixel_x;
-                let tl_rel_y = tile_y * tile_size as i32 - tl_pixel_y;
+    pool.install(|| {
+        (tl_tile_y..=br_tile_y).into_par_iter().for_each(|tile_y| {
+            for tile_x in tl_tile_x..=br_tile_x {
+                let url = url_template
+                    .replace("{x}", &tile_x.to_string())
+                    .replace("{y}", &tile_y.to_string())
+                    .replace("{z}", &zoom.to_string());
 
-                let start_x = tl_rel_x.max(0) as u32;
-                let start_y = tl_rel_y.max(0) as u32;
+                if let Some(tile) = download_tile(&url, headers, channels) {
+                    let mut img = img.lock().unwrap();
 
-                let src_start_x = (start_x as i32 - tl_rel_x) as u32;
-                let src_start_y = (start_y as i32 - tl_rel_y) as u32;
-                let tile_w = (tile_size - src_start_x).min(img_w - start_x);
-                let tile_h = (tile_size - src_start_y).min(img_h - start_y);
+                    let tl_rel_x = tile_x * tile_size as i32 - tl_pixel_x;
+                    let tl_rel_y = tile_y * tile_size as i32 - tl_pixel_y;
 
-                for y in 0..tile_h {
-                    for x in 0..tile_w {
-                        let pixel = tile.get_pixel(src_start_x + x, src_start_y + y);
-                        img.put_pixel(start_x + x, start_y + y, pixel);
+                    let start_x = tl_rel_x.max(0) as u32;
+                    let start_y = tl_rel_y.max(0) as u32;
+
+                    let src_start_x = (start_x as i32 - tl_rel_x) as u32;
+                    let src_start_y = (start_y as i32 - tl_rel_y) as u32;
+                    let tile_w = (tile_size - src_start_x).min(img_w - start_x);
+                    let tile_h = (tile_size - src_start_y).min(img_h - start_y);
+
+                    for y in 0..tile_h {
+                        for x in 0..tile_w {
+                            let pixel = tile.get_pixel(src_start_x + x, src_start_y + y);
+                            img.put_pixel(start_x + x, start_y + y, pixel);
+                        }
                     }
                 }
+
+                bar.lock().unwrap().inc(1);
             }
-            bar.lock().unwrap().inc(1);
-        }
+        });
     });
     bar.lock().unwrap().finish();
 
