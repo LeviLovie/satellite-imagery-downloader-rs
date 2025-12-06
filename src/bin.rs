@@ -49,6 +49,9 @@ fn try_main() -> Result<()> {
     if let Some(zoom) = args.zoom {
         prefs["zoom"] = json!(zoom);
     }
+    if let Some(threads) = args.threads {
+        prefs["threads"] = json!(threads);
+    }
 
     let re = Regex::new(r"[+-]?\d*\.\d+|\d+").unwrap();
     let caps_tl: Vec<f64> = re
@@ -75,6 +78,7 @@ fn try_main() -> Result<()> {
     let tile_size = prefs["tile_size"].as_u64().unwrap() as u32;
     let channels = 4;
     let url_template = prefs["url"].as_str().unwrap();
+    let threads = prefs["threads"].as_u64().unwrap() as usize;
 
     let mut headers = HeaderMap::new();
     if let Some(headers_map) = prefs["headers"].as_object() {
@@ -99,6 +103,7 @@ fn try_main() -> Result<()> {
         &headers,
         tile_size,
         channels,
+        threads,
     );
     println!("Downloaded successfully.");
 

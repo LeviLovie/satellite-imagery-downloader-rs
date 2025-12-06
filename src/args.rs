@@ -9,7 +9,6 @@ pub fn parse() -> Args {
 pub struct Args {
     #[argh(
         option,
-        short = 'p',
         description = "preferences file path",
         default = "String::from(\"./preferences.json\")"
     )]
@@ -27,6 +26,9 @@ pub struct Args {
 
     #[argh(option, short = 's', description = "tile size in pixels")]
     pub tile_size: Option<u32>,
+
+    #[argh(option, short = 'p', description = "threads to use")]
+    pub threads: Option<u32>,
 
     #[argh(option, short = 'd', description = "out directory")]
     pub out_dir: Option<String>,
