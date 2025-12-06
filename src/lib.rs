@@ -76,10 +76,6 @@ pub fn download_image(
 
                 let tl_rel_x = tile_x * tile_size as i32 - tl_pixel_x;
                 let tl_rel_y = tile_y * tile_size as i32 - tl_pixel_y;
-                let width_min = img_w as i32 - tl_rel_x;
-                let height_min = img_h as i32 - tl_rel_y;
-                let tile_w = width_min.min(tile_size as i32) as u32;
-                let tile_h = height_min.min(tile_size as i32) as u32;
 
                 let start_x = tl_rel_x.max(0) as u32;
                 let start_y = tl_rel_y.max(0) as u32;
