@@ -1,3 +1,13 @@
+> [!CAUTION]
+> This GitHub repository is archived and no longer updated.
+>
+> NeoCurl has moved to my self-hosted Forgejo instance: https://git.lovie.dev/levi/satellite-imagery.
+> A public mirror is also available on GitLab for people without local Forgejo accounts: https://gitlab.com/levilovie/satellite-imagery.
+>
+> Issues and merge requests are welcome on Forgejo or GitLab. The code in this GitHub repository is out of date and should not be used as the source of truth.
+>
+> See https://lovie.dev/code for more info.
+
 # Satellite Imagery Downloader
 
 A rewrite of the [original program](https://github.com/andolg/satellite-imagery-downloader) by [andolg](https://github.com/andolg) in Rust.
